@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <link rel="stylesheet" href="./dist/output.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+
+  <title>Frontend Mentor | Calculator app</title>
+  
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    .attribution { font-size: 11px; text-align: center; color:aliceblue;}
+    .attribution a { color: hsl(187, 93%, 59%); }
+    </style>
+</head>
+<body class="bg-main-t1 flex justify-center">
+  <div id="container" class= "flex flex-col max-w-lg justify-self-center">
+    <!-- <div class="attribution bg-main-t1">
+      Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+      Coded by <a href="#">Muhammad Khatam Ramadhan</a>.
+    </div> -->
+    <div id="calc-container" class="p-2">
+      <div id="header" class="flex justify-between items-center">
+        <p class="text-2xl font-bold text-btn-pr1 p-2">calc</p>
+        <div id="theme-select-container" class="flex justify-center items-center">
+          <p class="text-sm font-bold px-6 text-btn-pr1">THEME</p>
+          <div id="radio-container" class="">
+            <div id="radio-label" class="flex justify-between px-1">
+              <p class="text-xs text-btn-pr1">1</p>
+              <p class="text-xs text-btn-pr1">2</p>
+              <p class="text-xs text-btn-pr1">3</p>
+            </div>
+            <div id="radio-button" class="flex bg-third-t1 rounded-xl justify-between">
+              <input type="radio" name="theme-toggle"/>
+              <input type="radio" name="theme-toggle"/>
+              <input type="radio" name="theme-toggle"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="screen-container" class="my-2 rounded-md">
+        <input id="display" type="number" class="bg-third-t1 w-full py-3 px-2 text-right rounded-md text-btn-pr1 font-semibold font-sans text-3xl">
+      </div>
+      <div id="keys-container" class="h-[100%] grid grid-cols-4 gap-3 bg-second-t1 font-sans font-medium p-3 rounded-md">
+        <button onclick="number(7)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">7</button>
+        <button onclick="number(8)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">8</button>
+        <button onclick="number(9)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">9</button>
+
+        <button onclick="operator('Del')" class="bg-btn-delpr1 rounded-lg border-b-2 border-r-2 hover:bg-btn-sh-pr1">DEL</button>
+
+        <button onclick="number(4)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">4</button>
+        <button onclick="number(5)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">5</button>
+        <button onclick="number(6)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">6</button>
+
+        <button onclick="operator('+')" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">+</button>
+
+        <button onclick="number(1)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">1</button>
+        <button onclick="number(2)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">2</button>
+        <button onclick="number(3)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">3</button>
+
+        <button onclick="number('-')" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">-</button>
+
+        <button onclick="operator('.')" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">.</button>
+        <button onclick="number(0)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">0</button>
+        <button onclick="operator('/')" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">/</button>
+
+        <button onclick="number(7)" class="bg-btn-pr1 rounded-lg px-6 border-b-2 border-r-2 hover:bg-btn-sh-pr1 ">x</button>
+
+        <button onclick="operator('AC')" class="bg-btn-delpr1 col-span-2 rounded-lg border-b-2 border-r-2 hover:bg-btn-sh-pr1">RESET</button>
+        <button onclick="calculate()" class="bg-btn-eq1 col-span-2 rounded-lg border-b-2 border-r-2 hover:bg-btn-sh-pr1">=</button>
+      </div>
+    </div>    
+  </div>
+
+  <script>
+    let inputNumber = [];
+    let inputOperator = [];
+    let inputs = ""
+    let newCounting = true;
+    let result = []
+
+    const display = document.getElementById('display')
+
+    function number(number) {
+      inputs += number
+        
+      display.value = inputs
+    }
+
+    //handle when the Del button, AC button,dot button and other operators (+, /, -, x) are pressed. It renders the operator into #input element
+    function operator(operator) {
+      if(operator == "AC"){
+        inputs = ""
+        display.value = ""
+        inputNumber = []
+        inputOperator = []
+        result = []
+      }
+      if(operator == "Del"){
+        inputs = inputs.slice(0,-1)
+        display.value = inputs
+      }
+      if(operator == "+"){
+        display.value = operator
+        inputNumber.push(parseInt(inputs))
+        inputOperator.push(operator)
+        inputs = ""
+      }
+      if(operator == "/"){
+        display.value = operator
+        inputNumber.push(parseInt(inputs))
+        inputOperator.push(operator)
+        inputs = ""
+      }
+      if(operator == "-"){
+        display.value = operator
+        inputNumber.push(parseInt(inputs))
+        inputOperator.push(operator)
+        inputs = ""
+      }
+      if(operator == "*"){
+        display.value = operator
+        inputNumber.push(parseInt(inputs))
+        inputOperator.push(operator)
+        inputs = ""
+      }
+      if(operator == "."){
+        if(inputs[inputs.length-1] != "."){
+          inputs += operator
+          display.value = inputs
+        }
+      }
+      if(inputNumber.length == 2){
+        calculate()
+      }
+    }
+
+      //handle when = button is pressed. It renders the result into #input element
+      function calculate() {
+        if(inputNumber.length < 2){
+          inputNumber.push(parseInt(inputs))
+        }
+        if(inputOperator[0] == "+"){
+          if(result.length > 0){
+            result.push(result[result.length - 1]) + inputNumber[0]
+          }
+          else{
+            result.push(inputNumber[0] + inputNumber[1])
+          }
+        }
+        if(inputOperator[0] == "-"){
+          result.push(inputNumber[0] - inputNumber[1])
+        }
+        if(inputOperator[0] == "/"){
+          result.push(inputNumber[0] / inputNumber[1])
+        }
+        if(inputOperator[0] == "*"){
+          result.push(inputNumber[0] * inputNumber[1])
+        }
+        inputNumber = []
+        inputOperator = []
+        display.value = result[result.length-1]
+        console.log(result)
+      }
+    </script>
+</body>
+
+
+
+</html>
